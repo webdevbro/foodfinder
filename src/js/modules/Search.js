@@ -6,10 +6,10 @@ class Search {
   }
 
   async getResults() {
-    const key = "6d13df9289644038af5d700970aacd8c";
     const url = "https://api.spoonacular.com/recipes/search?apiKey=";
+    const key = "6d13df9289644038af5d700970aacd8c";
     try {
-      const res = await axios(`${url}${key}&q=${this.query}`);
+      const res = await axios(`${url}${key}&query=${this.query}&number=20`);
       this.recipes = res.data.results;
     } catch (error) {
       alert(error);
