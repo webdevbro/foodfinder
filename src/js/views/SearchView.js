@@ -2,6 +2,7 @@ class SearchView {
   constructor() {
     this.searchInput = document.querySelector(".search__field");
     this.searchList = document.querySelector(".results__list");
+    this.resultsPages = document.querySelector(".results__pages");
     this.events();
   }
 
@@ -47,13 +48,54 @@ class SearchView {
     `;
   }
 
+  /* pagination */
+  renderButtons(page, numResults, resPerPage) {
+    const pages = Math.ceil(numResults / resPerPage);
+    let button;
+    if (page == 1 && pages > 1) {
+      button = this.createButton(page, "next");
+    } else if (page < pages) {
+      button = `
+        ${this.createButton(page, "prev")}
+        ${this.createButton(page, "next")}
+      `;
+    } else if (page == pages && pages > 1) {
+      button = this.createButton(page, "prev");
+    }
+    document
+      .querySelector(".results__pages")
+      .insertAdjacentHTML("afterbegin", button);
+  }
+
+  /* create pagination html */
+  createButton(page, type) {
+    return `
+      <button class="btn-inline results__btn--${type}" data-goto="${
+      type == "prev" ? page - 1 : page + 1
+    }">
+        <span>Page ${type == "prev" ? page - 1 : page + 1}</span>
+        <svg class="search__icon">
+          <use href="img/icons.svg#icon-triangle-${
+            type == "prev" ? "left" : "right"
+          }"></use>
+        </svg>
+      </button>
+    `;
+  }
+
   /* render all results (array) */
-  renderResults(recipes) {
-    recipes.forEach(el => {
+  renderResults(recipes, page = 1, resPerPage = 10) {
+    // render results of current page
+    const start = (page - 1) * resPerPage;
+    const end = page * resPerPage;
+    recipes.slice(start, end).forEach(el => {
       let recipeItem = this.renderRecipe(el);
       this.searchList.insertAdjacentHTML("beforeend", recipeItem);
     });
+    // render pagination buttons
+    this.renderButtons(page, recipes.length, resPerPage);
   }
+
   clearInput() {
     setTimeout(() => {
       this.searchInput.value = "";
@@ -61,6 +103,7 @@ class SearchView {
   }
   clearResults() {
     this.searchList.innerHTML = "";
+    this.resultsPages.innerHTML = "";
   }
 }
 
