@@ -33,7 +33,7 @@ class SearchView {
     const imageSize = "500x500";
     return `
     <li>
-      <a class="results__link" href="#">
+      <a class="results__link" href="#${recipe.id}">
         <figure class="results__fig">
           <img src="${imagePath}${recipe.image}" alt="${recipe.title}" />
         </figure>

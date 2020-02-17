@@ -409,3 +409,12 @@ body {
 }
 
 /* RECIPE */
+
+
+
+/* SHOPPING */
+.shopping {
+  padding: 3rem 4rem;
+  display: flex;
+  flex-direction: column;
+}
